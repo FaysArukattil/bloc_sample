@@ -1,5 +1,7 @@
-import 'package:block_sample/controllers/bloc/counter_bloc.dart';
+import 'package:block_sample/controllers/bloc/counter/counter_bloc.dart';
+import 'package:block_sample/controllers/bloc/login/login_bloc.dart';
 import 'package:block_sample/views/homescreen.dart';
+import 'package:block_sample/views/loginscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +12,7 @@ void main() {
         BlocProvider<CounterBloc>(
           create: (BuildContext context) => CounterBloc(),
         ),
+        BlocProvider<LoginBloc>(create: (BuildContext context) => LoginBloc()),
       ],
       child: const MyApp(),
     ),
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Homescreen(),
+      home: LoginScreen(),
     );
   }
 }
