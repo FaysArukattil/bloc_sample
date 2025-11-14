@@ -1,38 +1,34 @@
 // ignore: depend_on_referenced_packages
+import 'dart:async';
+
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial(email: '', password: '')) {
-    on<EmailChanged>((event, emit) {
-      emit(LoginState(email: event.email, password: state.password));
-    });
+  LoginBloc() : super(LoginState.initial()) {
+    on<EmailChanged>(_emailChanged);
+    on<PasswordChanged>(_passwordChanged);
 
-    on<PasswordChanged>((event, emit) {
-      emit(LoginState(email: state.email, password: event.password));
+    on<Login>((event, emit) {
+      emit(state.copyWith(isloading: true));
+      //api call
+      //update setstate with copy with
+      Future.delayed(Duration(seconds: 1));
+      emit(state.copyWith(isloading: false, isSuccess: true));
     });
+  }
 
-    on<LoginButtonPressed>((event, emit) {
-      if (state.email == 'test.com' && state.password == '1234') {
-        emit(
-          LoginState(
-            email: state.email,
-            password: state.password,
-            message: '✅ Login Successful!',
-          ),
-        );
-      } else {
-        emit(
-          LoginState(
-            email: state.email,
-            password: state.password,
-            message: '❌ Invalid credentials',
-          ),
-        );
-      }
-    });
+  FutureOr<void> _passwordChanged(
+    PasswordChanged event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(password: event.password));
+  }
+
+  FutureOr<void> _emailChanged(EmailChanged event, Emitter<LoginState> emit) {
+    emit(state.copyWith(email: event.email));
   }
 }
